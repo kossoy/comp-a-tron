@@ -1,0 +1,78 @@
+<head>
+    <title>CompaBeer!</title>
+</head>
+<body>
+
+<div class="container">
+    {{> header}}
+    <div id="main" class="row-fluid">
+        {{renderPage}}
+    </div>
+</div>
+
+</body>
+
+<template name="itemsList">
+    <div class="items">
+        {{#each items}}
+        {{> rowItem}}
+        {{/each}}
+    </div>
+</template>
+
+<template name="rowItem">
+    <div class="item">
+        <div class="item-content">
+            <h3>
+                <span>{{title}}</span>
+                <span class="quantity">{{quantity}}</span>
+                <span class="price">{{price}}</span>
+                <span class="unit-price">{{unitPrice}}</span>
+                <a href="{{itemPagePath this}}" class="btn">Show</a>
+            </h3>
+        </div>
+    </div>
+</template>
+
+<template name="itemPage">
+    {{#with currentItem}}
+    {{> rowItem}}
+    {{/with}}
+</template>
+
+
+<template name="itemSubmit">
+    <form class="main">
+
+        <div class="control-group">
+            <label class="control-label" for="title">Title</label>
+
+            <div class="controls">
+                <input name="title" type="text" value="" placeholder="А шо эта?"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="price">Price</label>
+
+            <div class="controls">
+                <input type="text" name="price" placeholder="Скока, скока стоит?"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="quantity">Quantity</label>
+
+            <div class="controls">
+                <input name="quantity" type="text" value="" placeholder="Бери побольшы"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+            </div>
+        </div>
+
+    </form>
+</template>
