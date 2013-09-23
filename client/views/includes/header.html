@@ -8,9 +8,11 @@
             </a>
             <a class="brand" href="/">Comp-a-Beer!</a>
             <div class="nav-collapse collapse">
+                {{#if currentUser}}
                 <ul class="nav">
-                    {{#if currentUser}}<li><a href="{{itemSubmitPath}}">New</a></li>{{/if}}
+                    <li><a href="{{itemSubmitPath}}">New</a></li>
                 </ul>
+                {{/if}}
                 <ul class="nav pull-right">
                     <li>{{loginButtons}}</li>
                 </ul>
