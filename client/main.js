@@ -2,7 +2,8 @@ Meteor.subscribe('items');
 
 Template.itemsList.helpers({
     items: function () {
-        return Items.find();
+        var items = Items.find().fetch()
+        return _(items).sortBy(function(obj){ return parseFloat(obj.price/obj.quantity); });
     }
 });
 

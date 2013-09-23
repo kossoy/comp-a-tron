@@ -4,5 +4,22 @@
 
 .item-content span {
     display: inline-block;
-    padding-left: 70px;
+    padding-left: 30px;
+    width: 80px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.item:first-child {
+    background-color: darkseagreen;
+}
+
+.item:first-child span {
+    font-size: 2em;
+    line-height: 1.7;
+}
+
+.item-content span:first-child {
+    width: 260px;
 }
