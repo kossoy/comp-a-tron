@@ -5,7 +5,7 @@
 .item-content span {
     display: inline-block;
     padding-left: 30px;
-    width: 80px;
+    width: 100px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -21,5 +21,5 @@
 }
 
 .item-content span:first-child {
-    width: 260px;
+    width: 450px;
 }
