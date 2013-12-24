@@ -1,5 +1,9 @@
 Meteor.subscribe('items');
 
+var getUnitPrice = function(){
+  return (this.price / this.quantity * 0.5).toFixed(2);
+};
+
 Template.itemsList.helpers({
   items: function () {
     var items = Items.find().fetch()
@@ -10,15 +14,14 @@ Template.itemsList.helpers({
 });
 
 Template.rowItem.helpers({
-  unitPrice: function () {
-    return (this.price / this.quantity * 0.5).toFixed(2);
-  }
+  unitPrice: getUnitPrice
 });
 
 Template.itemPage.helpers({
     currentItem: function () {
       return Items.findOne(Session.get('currentItemId'));
-    }
+    },
+    unitPrice: getUnitPrice
   }
 );
 
