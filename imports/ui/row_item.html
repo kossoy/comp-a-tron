@@ -1,0 +1,18 @@
+<template name="rowItem">
+    <li class="{{#if private}}private{{/if}}">
+        <button class="delete">&times;</button>
+
+        <h3>{{title}}</h3>
+        {{price}} for {{quantity}}
+        {{#if isOwner}}
+            <button class="toggle-private">
+                {{#if private}}
+                    Private
+                {{else}}
+                    Public
+                {{/if}}
+            </button>
+        {{/if}}
+        <h4>{{getUnitPrice unitPrice}}</h4>
+    </li>
+</template>

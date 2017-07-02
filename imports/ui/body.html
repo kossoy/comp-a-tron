@@ -1,0 +1,27 @@
+<body>
+<div class="container">
+    <header>
+        <h1>Comp-a-Beer</h1>
+
+        <div class="login">{{> loginButtons}}</div>
+
+        {{#if currentUser}}
+            <form class="new-row-item">
+                <input name="title" placeholder="Title"/>
+                <input name="quantity" placeholder="Quantity"/>
+                <input name="price" placeholder="Price"/>
+                <input type="submit"/>
+            </form>
+        {{/if}}
+
+
+    </header>
+
+    <ul>
+        {{#each rowItems}}
+            {{> rowItem}}
+        {{/each}}
+    </ul>
+</div>
+</body>
+
