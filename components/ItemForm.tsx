@@ -2,6 +2,8 @@
 
 import { useState, FormEvent } from 'react';
 import { fetchWithAuth } from '@/lib/client-auth';
+import { CATEGORIES, UNITS, UnitType, CategoryType } from '@/lib/types';
+import { calculateNormalizedUnitPrice, formatUnitPriceDisplay } from '@/lib/units';
 
 interface ItemFormProps {
   onItemCreated: () => void;
@@ -11,6 +13,11 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
   const [title, setTitle] = useState('');
   const [quantity, setQuantity] = useState('');
   const [price, setPrice] = useState('');
+  const [unit, setUnit] = useState<UnitType>('count');
+  const [category, setCategory] = useState<CategoryType>('other');
+  const [tags, setTags] = useState('');
+  const [store, setStore] = useState('');
+  const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -20,12 +27,22 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
     setLoading(true);
 
     try {
+      const tagArray = tags
+        .split(',')
+        .map((t) => t.trim())
+        .filter((t) => t.length > 0);
+
       const res = await fetchWithAuth('/api/items', {
         method: 'POST',
         body: JSON.stringify({
           title,
           quantity: parseFloat(quantity),
           price: parseFloat(price),
+          unit,
+          category,
+          tags: tagArray,
+          store: store || undefined,
+          notes: notes || undefined,
         }),
       });
 
@@ -39,6 +56,11 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
       setTitle('');
       setQuantity('');
       setPrice('');
+      setUnit('count');
+      setCategory('other');
+      setTags('');
+      setStore('');
+      setNotes('');
       onItemCreated();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -47,10 +69,10 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
     }
   };
 
-  const unitPrice =
+  const unitPriceDisplay =
     quantity && price && parseFloat(quantity) > 0
-      ? (parseFloat(price) / parseFloat(quantity)).toFixed(2)
-      : '0.00';
+      ? formatUnitPriceDisplay(parseFloat(price), parseFloat(quantity), unit)
+      : '$0.00/item';
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 mb-6">
@@ -62,10 +84,11 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+      {/* Basic Information */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-            Item Name
+            Item Name *
           </label>
           <input
             id="title"
@@ -80,8 +103,30 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
         </div>
 
         <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
+            Category
+          </label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value as CategoryType)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            disabled={loading}
+          >
+            {CATEGORIES.map((cat) => (
+              <option key={cat.value} value={cat.value}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Quantity, Unit, Price */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div>
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="quantity">
-            Quantity
+            Quantity *
           </label>
           <input
             id="quantity"
@@ -97,8 +142,27 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
         </div>
 
         <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="unit">
+            Unit
+          </label>
+          <select
+            id="unit"
+            value={unit}
+            onChange={(e) => setUnit(e.target.value as UnitType)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            disabled={loading}
+          >
+            {UNITS.map((u) => (
+              <option key={u.value} value={u.value}>
+                {u.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
-            Total Price ($)
+            Total Price ($) *
           </label>
           <input
             id="price"
@@ -114,10 +178,60 @@ export default function ItemForm({ onItemCreated }: ItemFormProps) {
         </div>
       </div>
 
+      {/* Store and Tags */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="store">
+            Store (optional)
+          </label>
+          <input
+            id="store"
+            type="text"
+            value={store}
+            onChange={(e) => setStore(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="e.g., Walmart, Costco"
+            disabled={loading}
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tags">
+            Tags (optional, comma-separated)
+          </label>
+          <input
+            id="tags"
+            type="text"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="e.g., organic, sale, bulk"
+            disabled={loading}
+          />
+        </div>
+      </div>
+
+      {/* Notes */}
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="notes">
+          Notes (optional)
+        </label>
+        <textarea
+          id="notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          placeholder="e.g., On sale until Friday, Better quality"
+          rows={2}
+          disabled={loading}
+        />
+      </div>
+
+      {/* Submit */}
       <div className="flex items-center justify-between">
         <div className="text-lg">
           <span className="text-gray-600">Unit Price: </span>
-          <span className="font-bold text-green-600">${unitPrice}</span>
+          <span className="font-bold text-green-600">{unitPriceDisplay}</span>
         </div>
 
         <button
