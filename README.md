@@ -20,12 +20,24 @@ A modern price comparison web application built with Next.js 15, TypeScript, Mon
 
 ## Features
 
+### Core Features
 - ✅ **User Authentication** - Register and login with JWT tokens
-- ✅ **Price Comparison** - Automatically calculate unit prices
+- ✅ **Price Comparison** - Automatically calculate unit prices with smart normalization
 - ✅ **Real-time Updates** - Live updates using Socket.io
 - ✅ **Privacy Controls** - Mark items as private or public
 - ✅ **Responsive Design** - Mobile-friendly Tailwind UI
 - ✅ **TypeScript** - Full type safety across the stack
+
+### Advanced Features (NEW!)
+- 🏷️ **Categories & Tags** - Organize items with 10 categories + custom tags
+- 📏 **Units & Measurements** - Support for 11 unit types (oz, lb, ml, L, etc.) with automatic conversion
+- 📊 **Price History** - Track price changes over time for trend analysis
+- 📥 **CSV Export** - Export all data to spreadsheet format
+- 📋 **Shopping Lists** - Create and manage shopping lists from price comparisons
+- 🔍 **Advanced Filtering** - Filter by category, search by name, filter by price range
+- 🔀 **Smart Sorting** - Sort by unit price, total price, quantity, name, or date
+- 📝 **Notes & Store** - Add notes and store locations to items
+- 🎯 **Normalized Pricing** - Compare apples-to-apples across different units ($/oz vs $/ml)
 
 ## Project Structure
 
@@ -162,18 +174,28 @@ The application will be available at: http://localhost:9000
    - Create an account with a username and password
 
 2. **Add Items**
-   - Fill in the item name, quantity, and total price
-   - The unit price is calculated automatically
-   - Click "Add Item" to save
+   - Fill in item name, quantity, unit, and total price
+   - Select a category (groceries, beverages, etc.)
+   - Add tags (optional): organic, sale, bulk, etc.
+   - Add store name and notes (optional)
+   - Unit price is calculated automatically with smart conversion
 
 3. **Compare Prices**
-   - Items are automatically sorted by unit price (lowest first)
-   - View all public items and your private items
+   - Items sorted by normalized unit price for fair comparison
+   - Filter by category or search by name
+   - Sort by price, quantity, name, or date
+   - View tags, notes, and store information
+   - Export to CSV for spreadsheet analysis
 
 4. **Manage Items**
    - Toggle items between private and public
    - Delete your own items
    - See real-time updates when other users add/remove items
+
+5. **Advanced Features**
+   - **Price History**: Track how prices change over time
+   - **Shopping Lists**: Create lists from your price comparisons
+   - **CSV Export**: Download all data for offline analysis
 
 ## API Endpoints
 
@@ -185,10 +207,21 @@ The application will be available at: http://localhost:9000
 
 ### Items
 
-- `GET /api/items` - List all items (public + user's private)
-- `POST /api/items` - Create a new item
+- `GET /api/items` - List all items with filtering & sorting
+  - Query params: `sortBy`, `sortOrder`, `category`, `search`, `minPrice`, `maxPrice`, `store`, `tags`
+- `POST /api/items` - Create a new item (with category, tags, unit, notes, store)
 - `DELETE /api/items/[id]` - Delete an item
 - `PATCH /api/items/[id]` - Update item privacy
+- `GET /api/items/[id]/history` - Get price history for an item
+- `GET /api/items/export` - Export all items to CSV
+
+### Shopping Lists
+
+- `GET /api/shopping-lists` - List user's shopping lists
+- `POST /api/shopping-lists` - Create a new shopping list
+- `GET /api/shopping-lists/[id]` - Get a specific shopping list
+- `PATCH /api/shopping-lists/[id]` - Update a shopping list
+- `DELETE /api/shopping-lists/[id]` - Delete a shopping list
 
 ## Real-time Features
 
