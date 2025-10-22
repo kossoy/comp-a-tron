@@ -9,20 +9,23 @@ The Comp-a-tron application has been completely rewritten using modern web techn
 ## Directory Structure
 
 ```
-comp-a-tron/
-├── (old) Meteor app files...
+comp-a-tron/                 # Root - Next.js application (main)
+├── app/                     # Next.js App Router
+├── components/              # React components
+├── lib/                     # Utilities and helpers
+├── contexts/                # React Context providers
+├── hooks/                   # Custom React hooks
+├── server.js                # Custom server with Socket.io
+├── package.json             # Next.js dependencies
+│
+├── comp-a-tron-meteor/      # Old Meteor app (archived)
 │   ├── .meteor/
 │   ├── client/
 │   ├── server/
 │   ├── imports/
 │   └── package.json
 │
-└── comp-a-tron-next/        # New Next.js application
-    ├── app/
-    ├── components/
-    ├── lib/
-    ├── server.js
-    └── package.json
+└── MIGRATION_GUIDE.md       # This file
 ```
 
 ## Technology Stack Comparison
@@ -264,14 +267,14 @@ You can run both versions side-by-side for comparison:
 
 **Old Meteor app:**
 ```bash
-cd /path/to/comp-a-tron
+cd /path/to/comp-a-tron/comp-a-tron-meteor
 meteor run
 # Runs on http://localhost:3000
 ```
 
-**New Next.js app:**
+**New Next.js app (in root):**
 ```bash
-cd /path/to/comp-a-tron/comp-a-tron-next
+cd /path/to/comp-a-tron
 npm run dev
 # Runs on http://localhost:3000
 ```
