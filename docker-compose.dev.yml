@@ -13,8 +13,8 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin123
-      MONGO_INITDB_DATABASE: comparatron
+      MONGO_INITDB_ROOT_PASSWORD: hard2gess
+      MONGO_INITDB_DATABASE: compatron
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
@@ -35,8 +35,8 @@ services:
       - "8081:8081"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
-      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123
-      ME_CONFIG_MONGODB_URL: mongodb://admin:admin123@mongodb:27017/
+      ME_CONFIG_MONGODB_ADMINPASSWORD: hard2gess
+      ME_CONFIG_MONGODB_URL: mongodb://admin:hard2gess@mongodb:27017/
       ME_CONFIG_BASICAUTH: false
     depends_on:
       - mongodb
