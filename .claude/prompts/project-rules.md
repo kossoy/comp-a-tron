@@ -11,6 +11,33 @@ This is a modern price comparison web application built with Next.js 15, TypeScr
 - **Database:** MongoDB (native driver)
 - **Authentication:** JWT with bcryptjs
 - **Real-time:** Socket.io for WebSocket connections
+- **Infrastructure:** Docker & Docker Compose for development
+
+## Docker Setup
+
+This project uses Docker Compose for easy development setup:
+
+- **MongoDB**: Runs in Docker container (port 27017)
+- **Mongo Express**: Web-based DB admin UI (port 8081)
+- **App**: Can run in Docker or locally (your choice)
+
+### Quick Start
+```bash
+# Start MongoDB in Docker (recommended)
+npm run docker:dev
+
+# Run app locally
+npm run dev
+```
+
+### Docker Scripts
+- `npm run docker:dev` - Start MongoDB only
+- `npm run docker:up` - Start all services
+- `npm run docker:down` - Stop services
+- `npm run docker:logs` - View logs
+- `npm run docker:clean` - Remove all containers and data
+
+See [DOCKER.md](../../DOCKER.md) for full documentation.
 
 ## Code Style Guidelines
 
@@ -76,11 +103,30 @@ This is a modern price comparison web application built with Next.js 15, TypeScr
 
 ## Development Workflow
 
-1. Start MongoDB: Ensure MongoDB is running locally or use Atlas
+### Recommended: Docker + Local Dev
+
+1. Start MongoDB in Docker: `npm run docker:dev`
 2. Install dependencies: `npm install`
-3. Configure `.env.local` with MongoDB URI and JWT_SECRET
+3. Configure `.env.local`:
+   ```env
+   MONGODB_URI=mongodb://admin:admin123@localhost:27017/comparatron?authSource=admin
+   JWT_SECRET=your-secret-key-here
+   ```
 4. Run development server: `npm run dev`
-5. Test changes thoroughly before committing
+5. Access Mongo Express: http://localhost:8081
+6. Test changes thoroughly before committing
+
+### Alternative: Full Docker Stack
+
+1. Start all services: `npm run docker:up`
+2. App runs at: http://localhost:3000
+3. View logs: `npm run docker:logs`
+
+### Database Management
+
+- **Mongo Express UI**: http://localhost:8081 (when docker:dev is running)
+- **MongoDB Shell**: `docker-compose exec mongodb mongosh`
+- **Backup/Restore**: See DOCKER.md for commands
 
 ## Testing Checklist
 

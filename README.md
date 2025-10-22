@@ -68,10 +68,38 @@ comp-a-tron/                 # Root directory (Next.js app)
 
 ### Prerequisites
 
-- Node.js 18+ installed
-- MongoDB running locally or a MongoDB Atlas account
+**Choose one of the following:**
 
-### Installation
+**Option A: Docker (Recommended)**
+- Docker and Docker Compose installed
+- No need to install Node.js or MongoDB locally
+
+**Option B: Local Development**
+- Node.js 18+ installed
+- MongoDB running locally or MongoDB Atlas account
+
+### Quick Start with Docker (Recommended)
+
+The easiest way to get started is using Docker Compose:
+
+```bash
+# 1. Start MongoDB in Docker
+npm run docker:dev
+
+# 2. Install dependencies
+npm install
+
+# 3. Run the app locally
+npm run dev
+```
+
+That's it! The app runs at http://localhost:3000, and MongoDB runs in Docker.
+
+**Bonus:** Access Mongo Express (DB admin UI) at http://localhost:8081
+
+📖 **Full Docker documentation:** See [DOCKER.md](./DOCKER.md) for detailed instructions.
+
+### Manual Installation (Without Docker)
 
 1. Clone/navigate to the project directory:
 ```bash
@@ -85,12 +113,24 @@ npm install
 
 3. Configure environment variables in `.env.local`:
 ```env
-MONGODB_URI=mongodb://localhost:27017/comparatron
+# For Docker MongoDB (recommended)
+MONGODB_URI=mongodb://admin:admin123@localhost:27017/comparatron?authSource=admin
+
+# For local MongoDB
+# MONGODB_URI=mongodb://localhost:27017/comparatron
+
 JWT_SECRET=your-secret-key-change-this-in-production
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-4. Start MongoDB (if running locally):
+4. Start MongoDB:
+
+**With Docker (recommended):**
+```bash
+npm run docker:dev
+```
+
+**Without Docker:**
 ```bash
 # macOS (with Homebrew)
 brew services start mongodb-community
