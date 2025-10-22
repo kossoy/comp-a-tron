@@ -31,36 +31,28 @@ A modern price comparison web application built with Next.js 15, TypeScript, Mon
 
 ```
 comp-a-tron/                 # Root directory (Next.js app)
-├── app/
-│   ├── api/
-│   │   ├── auth/           # Authentication endpoints
-│   │   │   ├── login/
-│   │   │   ├── register/
-│   │   │   └── me/
-│   │   └── items/          # Items CRUD endpoints
-│   │       └── [id]/
-│   ├── dashboard/          # Main dashboard page
+├── app/                     # Next.js app directory
+│   ├── api/                # API routes
+│   ├── dashboard/          # Dashboard page
 │   ├── login/              # Login page
-│   ├── register/           # Register page
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Landing page
-├── components/
-│   ├── ItemCard.tsx        # Individual item component
-│   ├── ItemForm.tsx        # Form to add items
-│   └── ItemList.tsx        # List of items with real-time updates
-├── contexts/
-│   └── AuthContext.tsx     # Authentication context
-├── hooks/
-│   └── useSocket.ts        # Socket.io hook
-├── lib/
-│   ├── auth.ts             # Server-side auth utilities
-│   ├── client-auth.ts      # Client-side auth utilities
-│   ├── mongodb.ts          # MongoDB connection
-│   ├── socket.ts           # Socket.io utilities
-│   └── types.ts            # TypeScript types
-├── comp-a-tron-meteor/     # Old Meteor app (archived)
-├── server.js               # Custom server with Socket.io
-├── .env.local              # Environment variables
+│   └── register/           # Register page
+├── components/              # React components
+├── contexts/                # React contexts
+├── docker/                  # Docker configuration
+│   ├── docker-compose.yml
+│   ├── docker-compose.dev.yml
+│   └── Dockerfile
+├── docs/                    # Documentation
+│   ├── README.md
+│   ├── DOCKER.md
+│   └── MIGRATION_GUIDE.md
+├── hooks/                   # Custom React hooks
+├── lib/                     # Utilities and shared code
+├── public/                  # Static assets
+├── comp-a-tron-meteor/      # Old Meteor app (archived)
+├── server.js                # Custom server with Socket.io
+├── .env                     # Docker Compose environment variables
+├── .env.local               # Local development environment variables
 └── package.json
 ```
 
@@ -93,11 +85,11 @@ npm install
 npm run dev
 ```
 
-That's it! The app runs at http://localhost:3000, and MongoDB runs in Docker.
+That's it! The app runs at http://localhost:9000, and MongoDB runs in Docker.
 
 **Bonus:** Access Mongo Express (DB admin UI) at http://localhost:8081
 
-📖 **Full Docker documentation:** See [DOCKER.md](./DOCKER.md) for detailed instructions.
+📖 **Full Docker documentation:** See [docs/DOCKER.md](./docs/DOCKER.md) for detailed instructions.
 
 ### Manual Installation (Without Docker)
 
@@ -111,16 +103,21 @@ cd comp-a-tron
 npm install
 ```
 
-3. Configure environment variables in `.env.local`:
+3. Configure environment variables:
+
+Copy `.env.example` to `.env` and update if needed:
+```bash
+cp .env.example .env
+```
+
+The default configuration in `.env` is ready to use with Docker.
+
+For `.env.local`:
 ```env
-# For Docker MongoDB (recommended)
 MONGODB_URI=mongodb://admin:admin123@localhost:27017/comparatron?authSource=admin
-
-# For local MongoDB
-# MONGODB_URI=mongodb://localhost:27017/comparatron
-
 JWT_SECRET=your-secret-key-change-this-in-production
-NEXT_PUBLIC_API_URL=http://localhost:3000
+PORT=9000
+NEXT_PUBLIC_API_URL=http://localhost:9000
 ```
 
 4. Start MongoDB:
@@ -155,12 +152,12 @@ npm run build
 npm start
 ```
 
-The application will be available at: http://localhost:3000
+The application will be available at: http://localhost:9000
 
 ## Usage
 
 1. **Register an Account**
-   - Navigate to http://localhost:3000
+   - Navigate to http://localhost:9000
    - Click "Get Started" or "Register"
    - Create an account with a username and password
 
